@@ -69,16 +69,16 @@ if __name__ == "__main__":
     # --- Data Logging Loop ---
     while True:
         current_time = time.time() - start_time
-        if current_time > 3.5:
+        if current_time > 7:
             break
             
         # 1. Command the Test Sequence
         target_vx, target_vy, target_omega = 0, 0, 0
-        if current_time < 1.0:
+        if current_time < 2.0:
             target_vx = TEST_SPEED # Forward
-        elif current_time < 2.0:
+        elif current_time < 4.0:
             target_vy = TEST_SPEED # Strafe Right
-        elif current_time < 3.0:
+        elif current_time < 6.0:
             target_omega = TEST_SPEED # Rotate CW
         else:
             stop_cart(rc) # Brake at 6 seconds
