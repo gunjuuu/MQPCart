@@ -18,6 +18,12 @@ TEST_SPEED = int(MAX_QPPS) # Target 40% max speed for the test
 LOG_FILE = "odometry_data.csv"
 PLOT_FILE = "odometry_plot.png"
 
+def to_signed_32(val):
+    """Converts a 32-bit unsigned integer from the RoboClaw back to a signed integer."""
+    if val >= 2147483648: # If it's greater than or equal to 2^31
+        return val - 4294967296 # Subtract 2^32 to wrap it back to negative
+    return val
+
 def set_chassis_velocity(rc, vx, vy, omega):
     """Translates chassis velocity into motor commands."""
     fl_desired = vx + vy + omega
@@ -45,7 +51,7 @@ def stop_cart(rc):
         pass
 
 if __name__ == "__main__":
-    print("--- Mecanum Odometry Profiler ---")
+    print("--- Mecanum Odometry Profiler (Patched) ---")
     
     rc = Basicmicro(COMPORT_NAME, BAUD_RATE)
     if not rc.Open():
@@ -82,10 +88,11 @@ if __name__ == "__main__":
         # 2. Read Actual Wheel Speeds
         try:
             # Reversing the polarity fix to get true wheel QPPS
-            raw_m2_80 = rc.ReadSpeedM2(LEFT_RC_ADDR)[1]
-            raw_m1_80 = rc.ReadSpeedM1(LEFT_RC_ADDR)[1]
-            raw_m1_81 = rc.ReadSpeedM1(RIGHT_RC_ADDR)[1]
-            raw_m2_81 = rc.ReadSpeedM2(RIGHT_RC_ADDR)[1]
+            # Wrapped in to_signed_32() to fix the basicmicro unpacking bug
+            raw_m2_80 = to_signed_32(rc.ReadSpeedM2(LEFT_RC_ADDR)[1])
+            raw_m1_80 = to_signed_32(rc.ReadSpeedM1(LEFT_RC_ADDR)[1])
+            raw_m1_81 = to_signed_32(rc.ReadSpeedM1(RIGHT_RC_ADDR)[1])
+            raw_m2_81 = to_signed_32(rc.ReadSpeedM2(RIGHT_RC_ADDR)[1])
             
             fl_qpps = -raw_m2_80
             bl_qpps = raw_m1_80
