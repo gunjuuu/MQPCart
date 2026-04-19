@@ -12,7 +12,7 @@ LEFT_RC_ADDR = 0x80
 RIGHT_RC_ADDR = 0x81
 
 MAX_QPPS = 2786
-ACCEL_RATE = 6000 
+ACCEL_RATE = 12000 
 TEST_SPEED = int(MAX_QPPS) # Target 40% max speed for the test
 
 LOG_FILE = "odometry_data.csv"
