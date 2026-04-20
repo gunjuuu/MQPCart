@@ -16,7 +16,7 @@ ACCEL_RATE = 12000
 TEST_SPEED = int(MAX_QPPS) # Target 40% max speed for the test
 
 LOG_FILE = "odometry_data.csv"
-PLOT_FILE = "odometry_plot.png"
+PLOT_FILE = "odometry_plot.svg"
 
 def to_signed_32(val):
     """Converts a 32-bit unsigned integer from the RoboClaw back to a signed integer."""
@@ -153,5 +153,5 @@ if __name__ == "__main__":
     plt.grid(True, linestyle=':', alpha=0.7)
     plt.legend()
     
-    plt.savefig(PLOT_FILE, dpi=300, bbox_inches='tight')
+    plt.savefig(PLOT_FILE, format='svg', bbox_inches='tight')
     print("Done! You can now view the PNG file.")
